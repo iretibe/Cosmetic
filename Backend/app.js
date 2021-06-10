@@ -1,75 +1,43 @@
-// console.log("Hello Chacour Cosmetic!");
-
 const express = require('express');
 const favicon = require('express-favicon');
 const app = express();
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
+const cors = require('cors');
+require('dotenv/config');
+
+
+app.use(cors());
+app.options('*', cors())
+
+
+var path = require('path');
+app.use(favicon(__dirname + '/public/favicon.ico'));
+
 
 // Middleware
 app.use(bodyParser.json());
 app.use(morgan('tiny'));
 
-// app.use(express.favicon()); // /favicon.ico
-// if (app.get('env') == 'development') {
-//   app.use(express.logger('dev'));
-// } else {
-//   app.use(express.logger('default'));
-// }
 
-var path = require('path')
+//Routes
+const categoriesRoutes = require('./routes/categories');
+const productsRoutes = require('./routes/products');
+const usersRoutes = require('./routes/users');
+const ordersRoutes = require('./routes/orders');
 
-// app.use(favicon(__dirname + '/public/favicon.png'));
-app.use(favicon(__dirname + '/public/favicon.ico'));
-// app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
-
-const productSchema = mongoose.Schema({
-  name: String,
-  image: String,
-  countInStock: {
-    type: Number,
-    required: true
-  }
-  // countInStock: Number
-})
-
-const Product = mongoose.model('Product', productSchema);
-
-// const favicon = require('serve-favicon');
-// const http = require('http');
-
-require('dotenv/config');
 
 const api = process.env.API_URL;
 
-app.get(`${api}/products`, async (req, res) => {
-    const productList = await Product.find();
 
-    if (!productList) {
-      res.status(500).json({success: false})
-    }
+app.use(`${api}/categories`, categoriesRoutes);
+app.use(`${api}/products`, productsRoutes);
+app.use(`${api}/users`, usersRoutes);
+app.use(`${api}/orders`, ordersRoutes);
 
-    res.send(productList);
-})
 
-app.post(`${api}/products`, (req, res) => {
-    const product = new Product({
-      name: req.body.name,
-      image: req.body.image,
-      countInStock: req.body.countInStock
-    })
-
-    product.save().then((createdProduct => {
-      res.status(201).json(createdProduct)
-    })).catch((err) => {
-      res.status(500).json({
-        error: err,
-        success: false
-      })
-    })
-})
-
+//Database
 mongoose.connect(process.env.CONNECTION_STRING, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -82,6 +50,8 @@ mongoose.connect(process.env.CONNECTION_STRING, {
   console.log(err)
 })
 
+
+//Server
 app.listen(3000, () => {
     console.log('Server is running on http://localhost:3000');
 })
