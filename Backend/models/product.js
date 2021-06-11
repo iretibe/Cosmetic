@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+
 const productSchema = mongoose.Schema({
     name: {
         type: String,
@@ -62,11 +63,11 @@ const productSchema = mongoose.Schema({
         type: Boolean,
         default: false,
     },
-
+    
     dateCreated: {
         type: Date,
         default: Date.now,
-    }
+    },
 })
 
 
@@ -78,5 +79,6 @@ productSchema.virtual('id').get(function () {
 productSchema.set('toJSON', {
     virtuals: true,
 });
+
 
 exports.Product = mongoose.model('Product', productSchema);
