@@ -4,7 +4,6 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-
 router.get(`/`, async (req, res) =>{
     const userList = await User.find().select('-passwordHash');
 
@@ -14,7 +13,6 @@ router.get(`/`, async (req, res) =>{
     res.send(userList);
 })
 
-
 router.get('/:id', async(req,res)=>{
     const user = await User.findById(req.params.id).select('-passwordHash');
 
@@ -23,7 +21,6 @@ router.get('/:id', async(req,res)=>{
     } 
     res.status(200).send(user);
 })
-
 
 router.post('/', async (req,res)=>{
     let user = new User({
@@ -45,7 +42,6 @@ router.post('/', async (req,res)=>{
 
     res.send(user);
 })
-
 
 router.put('/:id',async (req, res)=> {
 
@@ -79,7 +75,6 @@ router.put('/:id',async (req, res)=> {
 
     res.send(user);
 })
-
 
 router.post('/login', async (req,res) => {
     const user = await User.findOne({email: req.body.email})
@@ -140,7 +135,6 @@ router.delete('/:id', (req, res)=>{
        return res.status(500).json({success: false, error: err}) 
     })
 })
-
 
 router.get(`/get/count`, async (req, res) =>{
     const userCount = await User.countDocuments((count) => count)

@@ -2,7 +2,6 @@ const {Category} = require('../models/category');
 const express = require('express');
 const router = express.Router();
 
-
 router.get(`/`, async (req, res) =>{
     const categoryList = await Category.find();
 
@@ -12,7 +11,6 @@ router.get(`/`, async (req, res) =>{
     res.status(200).send(categoryList);
 })
 
-
 router.get('/:id', async(req,res)=>{
     const category = await Category.findById(req.params.id);
 
@@ -21,6 +19,7 @@ router.get('/:id', async(req,res)=>{
     } 
     res.status(200).send(category);
 })
+
 
 
 router.post('/', async (req,res)=>{
@@ -55,7 +54,6 @@ router.put('/:id',async (req, res)=> {
     res.send(category);
 })
 
-
 router.delete('/:id', (req, res)=>{
     Category.findByIdAndRemove(req.params.id).then(category =>{
         if(category) {
@@ -67,6 +65,5 @@ router.delete('/:id', (req, res)=>{
        return res.status(500).json({success: false, error: err}) 
     })
 })
-
 
 module.exports =router;

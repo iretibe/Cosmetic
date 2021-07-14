@@ -15,6 +15,7 @@ app.options('*', cors())
 
 
 var path = require('path');
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(favicon(__dirname + '/public/favicon.ico'));
 
 
